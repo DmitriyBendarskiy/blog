@@ -2,6 +2,7 @@ package bendarskiy.dmitriy.blog.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 public class Article {
 
-    private Long id;
+    @Id
+    private String id;
 
     private String name;
 

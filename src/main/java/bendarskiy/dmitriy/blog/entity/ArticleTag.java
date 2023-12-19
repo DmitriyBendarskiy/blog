@@ -2,6 +2,7 @@ package bendarskiy.dmitriy.blog.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 
@@ -9,9 +10,11 @@ import lombok.Data;
 @Entity
 public class ArticleTag {
 
-    @Column(name = "article_id")
-    private Long articleId;
+    @Id
+    private String id;
 
-    @Column(name = "tag_id")
-    private String tagId;
+    @Column(name = "article_id")
+    private String articleId;
+
+    private String tag;
 }
