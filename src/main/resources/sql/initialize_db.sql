@@ -12,22 +12,22 @@ CREATE TABLE `category` (
   `category` varchar(255)
 );
 
-CREATE TABLE `articleCategory` (
+CREATE TABLE `article_category` (
   `id` varchar(40) PRIMARY KEY,
   `article_id` varchar(40),
   `category_id` varchar(40),
   UNIQUE (article_id, category_id)
 );
 
-CREATE TABLE `articleTag` (
+CREATE TABLE `article_tag` (
   `id` varchar(40) PRIMARY KEY,
   `article_id` varchar(40),
   `tag` varchar(40),
   UNIQUE (article_id, tag)
 );
 
-ALTER TABLE `articleCategory` ADD FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+ALTER TABLE `article_category` ADD FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
 
-ALTER TABLE `articleCategory` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
+ALTER TABLE `article_category` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
 
-ALTER TABLE `articleTag` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
+ALTER TABLE `article_tag` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);

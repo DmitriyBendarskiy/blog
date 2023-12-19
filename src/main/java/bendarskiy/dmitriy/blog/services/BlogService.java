@@ -2,6 +2,7 @@
 package bendarskiy.dmitriy.blog.services;
 
 import bendarskiy.dmitriy.blog.dto.ArticleDTO;
+import bendarskiy.dmitriy.blog.dto.CategoryDTO;
 import bendarskiy.dmitriy.blog.entity.Article;
 import bendarskiy.dmitriy.blog.entity.ArticleCategory;
 import bendarskiy.dmitriy.blog.entity.ArticleTag;
@@ -12,9 +13,11 @@ import bendarskiy.dmitriy.blog.repository.ArticleTagRepository;
 import bendarskiy.dmitriy.blog.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,8 +41,24 @@ public class BlogService {
         return categoryRepository.findAll();
     }
 
-    public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+    public List<ArticleDTO> getAllArticles() {
+        List<Article> articles = articleRepository.findAll();
+        return articles.stream().map(article -> {
+            ArticleDTO articleDTO = new ArticleDTO();
+            articleDTO.setId(article.getId());
+            articleDTO.setName(article.getName());
+            articleDTO.setText(article.getText());
+            articleDTO.setCreatedAt(article.getCreatedAt());
+            articleDTO.setCategories(articleCategoryRepository.findByArticleId(article.getId()).stream().map(articleCategory -> {
+                Category category = categoryRepository.findById(articleCategory.getCategoryId()).orElse(new Category());
+                CategoryDTO categoryDTO = new CategoryDTO();
+                categoryDTO.setId(category.getId());
+                categoryDTO.setCategoryName(category.getCategoryName());
+                return categoryDTO;
+            }).toList());
+            articleDTO.setTags(articleTagRepository.findByArticleId(article.getId()).stream().map(ArticleTag::getTag).toList());
+            return articleDTO;
+        }).toList();
     }
 
     public List<Article> getArticlesByTag(String tag) {
@@ -56,6 +75,7 @@ public class BlogService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void addArticle(ArticleDTO articleDTO) {
         Article article = new Article();
         String articleId = UUID.randomUUID().toString();
@@ -65,11 +85,11 @@ public class BlogService {
         article.setCreatedAt(LocalDateTime.now());
         articleRepository.save(article);
 
-        articleDTO.getCategories().forEach(categoryId -> {
+        articleDTO.getCategories().forEach(categoryDTO -> {
             ArticleCategory articleCategory = new ArticleCategory();
             articleCategory.setId(UUID.randomUUID().toString());
             articleCategory.setArticleId(articleId);
-            articleCategory.setCategoryId(categoryId);
+            articleCategory.setCategoryId(categoryDTO.getId());
             articleCategoryRepository.save(articleCategory);
         });
 
@@ -82,10 +102,10 @@ public class BlogService {
         });
     }
 
-    public void addCategory(String categoryName) {
+    public void addCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setId(UUID.randomUUID().toString());
-        category.setCategoryName(categoryName);
+        category.setCategoryName(categoryDTO.getCategoryName());
         categoryRepository.save(category);
     }
 

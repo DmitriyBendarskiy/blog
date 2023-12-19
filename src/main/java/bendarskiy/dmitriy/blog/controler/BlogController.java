@@ -1,6 +1,7 @@
 package bendarskiy.dmitriy.blog.controler;
 
 import bendarskiy.dmitriy.blog.dto.ArticleDTO;
+import bendarskiy.dmitriy.blog.dto.CategoryDTO;
 import bendarskiy.dmitriy.blog.entity.Article;
 import bendarskiy.dmitriy.blog.entity.Category;
 import bendarskiy.dmitriy.blog.services.BlogService;
@@ -17,16 +18,16 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
 
-    @GetMapping(value = "/articles")
-    public ResponseEntity<List<Article>> getArticles() {
-        final List<Article> articles = blogService.getAllArticles();
+    @GetMapping(value = "/article")
+    public ResponseEntity<List<ArticleDTO>> getArticles() {
+        final List<ArticleDTO> articles = blogService.getAllArticles();
 
         return articles != null && !articles.isEmpty()
                 ? new ResponseEntity<>(articles, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/categories")
+    @GetMapping(value = "/category")
     public ResponseEntity<List<Category>> getCategories() {
         final List<Category> categories = blogService.getAllCategories();
 
@@ -35,7 +36,7 @@ public class BlogController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/articles/category/{categoryId}")
+    @GetMapping(value = "/article/category/{categoryId}")
     public ResponseEntity<List<Article>> getArticlesByCategoryId(@PathVariable(name = "categoryId") String categoryId) {
         final List<Article> articles = blogService.getArticlesByCategory(categoryId);
 
@@ -45,8 +46,8 @@ public class BlogController {
     }
 
 
-    @GetMapping(value = "/articles/blog/{categoryId}")
-    public ResponseEntity<List<Article>> getArticlesBTag(@PathVariable(name = "categoryId") String tag) {
+    @GetMapping(value = "/article/tag/{tag}")
+    public ResponseEntity<List<Article>> getArticlesByTag(@PathVariable(name = "tag") String tag) {
         final List<Article> articles = blogService.getArticlesByTag(tag);
 
         return articles != null && !articles.isEmpty()
@@ -61,8 +62,8 @@ public class BlogController {
     }
 
     @PostMapping(value = "/category")
-    public ResponseEntity<?> createArticle(@RequestBody String categoryName) {
-        blogService.addCategory(categoryName);
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
+        blogService.addCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

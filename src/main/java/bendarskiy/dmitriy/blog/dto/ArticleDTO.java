@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -11,11 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 public class ArticleDTO {
 
+    private String id;
+
     private String name;
 
     private String text;
 
-    private List<String> categories;
+    private List<CategoryDTO> categories;
 
     private List<String> tags;
+
+    private LocalDateTime createdAt;
 }
