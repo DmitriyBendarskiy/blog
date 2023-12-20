@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface ArticleTagRepository extends JpaRepository<ArticleTag, String> {
     void deleteByArticleId(String articleId);
+    void deleteByTag(String tag);
     List<ArticleTag> findByTag(String tag);
     List<ArticleTag> findByArticleId(String articleId);
 

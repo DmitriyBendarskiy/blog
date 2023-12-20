@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -61,18 +60,44 @@ public class BlogService {
         }).toList();
     }
 
-    public List<Article> getArticlesByTag(String tag) {
+    public List<ArticleDTO> getArticlesByTag(String tag) {
         return articleTagRepository.findByTag(tag)
                 .stream()
-                .map(articleTag -> articleRepository.findById(articleTag.getArticleId()).orElse(null))
+                .map(articleTag -> getArticleDTO(articleTag.getArticleId()))
                 .collect(Collectors.toList());
     }
 
-    public List<Article> getArticlesByCategory(String categoryId) {
+    public List<ArticleDTO> getArticlesByCategory(String categoryId) {
         return articleCategoryRepository.findByCategoryId(categoryId)
                 .stream()
-                .map(articleCategory -> articleRepository.findById(articleCategory.getArticleId()).orElse(null))
-                .collect(Collectors.toList());
+                .map(articleCategory -> getArticleDTO(articleCategory.getArticleId()))
+                .toList();
+    }
+
+    private ArticleDTO getArticleDTO(String articleId) {
+        ArticleDTO articleDTO = new ArticleDTO();
+        Article article = articleRepository.findById(articleId).orElse(null);
+        List<String> tags = articleTagRepository.findByArticleId(article.getId())
+                .stream()
+                .map(articleTag -> articleTag.getTag())
+                .toList();
+        List<CategoryDTO> categories = articleCategoryRepository.findByArticleId(article.getId())
+                .stream()
+                .map(articleCategory1 -> categoryRepository.findById(articleCategory1.getCategoryId()).map(category -> {
+                    CategoryDTO categoryDTO = new CategoryDTO();
+                    categoryDTO.setId(category.getId());
+                    categoryDTO.setCategoryName(category.getCategoryName());
+                    return categoryDTO;
+                }).orElse(null))
+                .toList();
+
+        articleDTO.setId(article.getId());
+        articleDTO.setName(article.getName());
+        articleDTO.setText(article.getText());
+        articleDTO.setCreatedAt(article.getCreatedAt());
+        articleDTO.setCategories(categories);
+        articleDTO.setTags(tags);
+        return articleDTO;
     }
 
     @Transactional
@@ -109,15 +134,22 @@ public class BlogService {
         categoryRepository.save(category);
     }
 
+    @Transactional
     public void deleteCategory(String categoryId) {
-        categoryRepository.deleteById(categoryId);
         articleCategoryRepository.deleteByCategoryId(categoryId);
+        categoryRepository.deleteById(categoryId);
     }
 
+    @Transactional
+    public void deleteTag(String tag) {
+        articleTagRepository.deleteByTag(tag);
+    }
+
+    @Transactional
     public void deleteArticle(String articleId) {
-        articleRepository.deleteById(articleId);
         articleCategoryRepository.deleteByArticleId(articleId);
         articleTagRepository.deleteByArticleId(articleId);
+        articleRepository.deleteById(articleId);
     }
 
 }

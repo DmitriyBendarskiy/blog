@@ -2,7 +2,6 @@ package bendarskiy.dmitriy.blog.controler;
 
 import bendarskiy.dmitriy.blog.dto.ArticleDTO;
 import bendarskiy.dmitriy.blog.dto.CategoryDTO;
-import bendarskiy.dmitriy.blog.entity.Article;
 import bendarskiy.dmitriy.blog.entity.Category;
 import bendarskiy.dmitriy.blog.services.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class BlogController {
     }
 
     @GetMapping(value = "/article/category/{categoryId}")
-    public ResponseEntity<List<Article>> getArticlesByCategoryId(@PathVariable(name = "categoryId") String categoryId) {
-        final List<Article> articles = blogService.getArticlesByCategory(categoryId);
+    public ResponseEntity<List<ArticleDTO>> getArticlesByCategoryId(@PathVariable(name = "categoryId") String categoryId) {
+        final List<ArticleDTO> articles = blogService.getArticlesByCategory(categoryId);
 
         return articles != null && !articles.isEmpty()
                 ? new ResponseEntity<>(articles, HttpStatus.OK)
@@ -47,8 +46,8 @@ public class BlogController {
 
 
     @GetMapping(value = "/article/tag/{tag}")
-    public ResponseEntity<List<Article>> getArticlesByTag(@PathVariable(name = "tag") String tag) {
-        final List<Article> articles = blogService.getArticlesByTag(tag);
+    public ResponseEntity<List<ArticleDTO>> getArticlesByTag(@PathVariable(name = "tag") String tag) {
+        final List<ArticleDTO> articles = blogService.getArticlesByTag(tag);
 
         return articles != null && !articles.isEmpty()
                 ? new ResponseEntity<>(articles, HttpStatus.OK)
@@ -73,10 +72,15 @@ public class BlogController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @DeleteMapping(value = "/category/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable(name = "id") String id) {
         blogService.deleteCategory(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/tag/{id}")
+    public ResponseEntity<?> deleteTag(@PathVariable(name = "id") String id) {
+        blogService.deleteTag(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
