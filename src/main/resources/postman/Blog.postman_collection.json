@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "0f526825-1ea9-467a-b53c-17c45695bcc2",
+		"name": "Blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31903591"
+	},
+	"item": [
+		{
+			"name": "Get all Articles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new Article",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Article3\",\r\n    \"text\": \"Text2\",\r\n    \"categories\": [\r\n        {\r\n            \"id\": \"beb64cf5-87b2-4423-9179-afdd5f3272e5\"\r\n        },\r\n        {\r\n            \"id\": \"82ffc3b6-ba71-467d-9df8-36c66341fee9\"\r\n        }\r\n    ],\r\n    \"tags\": [\r\n        \"Tag1\",\r\n        \"Tag2\",\r\n        \"Tag3\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/category",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new Category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryName\": \"Category3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/category",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all articles by category ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/article/category/beb64cf5-87b2-4423-9179-afdd5f3272e5",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article",
+						"category",
+						"beb64cf5-87b2-4423-9179-afdd5f3272e5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all articles by tag",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/article/tag/Tag1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article",
+						"tag",
+						"Tag1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete category by category ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/category/5817838a-322a-4882-a7e0-bc1bb5e6724f",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"category",
+						"5817838a-322a-4882-a7e0-bc1bb5e6724f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete article by article ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/article/19d9242d-28a2-4704-a3bd-1cb20cf757d1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article",
+						"19d9242d-28a2-4704-a3bd-1cb20cf757d1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete tag",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tag/Tag2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tag",
+						"Tag2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
